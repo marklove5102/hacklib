@@ -100,6 +100,7 @@ bool hl::ExeFile::loadFromMem(uintptr_t moduleBase)
 
         Section outSection;
         outSection.name = sectionName;
+        outSection.virtualAddress = section->sh_addr;
         if (section->sh_type != SHT_NOBITS)
         {
             outSection.data.assign(sectionData, sectionData + section->sh_size);
@@ -148,6 +149,8 @@ bool hl::ExeFile::loadFromMem(uintptr_t moduleBase)
 
         m_sections.push_back(std::move(outSection));
     }
+
+    m_entryPoint = m_impl->elfHeader->e_entry;
 
     m_valid = true;
     return true;

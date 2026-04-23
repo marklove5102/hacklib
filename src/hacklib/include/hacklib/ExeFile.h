@@ -22,6 +22,7 @@ public:
     };
     struct Section
     {
+        uintptr_t virtualAddress = 0;
         std::vector<uint8_t> data;
         std::string name;
         SectionType type = SectionType::Unknown;
@@ -44,12 +45,15 @@ public:
 
     std::span<const Section> getSections() const { return m_sections; }
 
+    uintptr_t getEntryPoint() const { return m_entryPoint; }
+
 private:
     std::unique_ptr<class ExeFileImpl> m_impl;
     bool m_valid = false;
     std::vector<uintptr_t> m_relocs;
     std::unordered_map<std::string, uintptr_t> m_exports;
     std::vector<Section> m_sections;
+    uintptr_t m_entryPoint = 0;
 };
 }
 

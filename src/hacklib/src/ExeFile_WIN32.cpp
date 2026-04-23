@@ -133,6 +133,7 @@ bool hl::ExeFile::loadFromMem(uintptr_t moduleBase)
         {
             outSection.type = SectionType::Code;
         }
+        outSection.virtualAddress = m_impl->peHeader->OptionalHeader.ImageBase + sectionHeader->VirtualAddress;
         m_sections.push_back(std::move(outSection));
     }
 
@@ -146,6 +147,8 @@ bool hl::ExeFile::loadFromMem(uintptr_t moduleBase)
             m_relocs = LoadRelocs(moduleBase + relocsOffset);
         }
     }
+
+    m_entryPoint = m_impl->peHeader->OptionalHeader.ImageBase + m_impl->peHeader->OptionalHeader.AddressOfEntryPoint;
 
     m_valid = true;
     return true;
